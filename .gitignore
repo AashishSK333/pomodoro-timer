@@ -1,0 +1,21 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+backend/.venv/
+*.egg-info/
+dist/
+build/
+
+# SQLite
+backend/sessions.db
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# macOS
+.DS_Store
