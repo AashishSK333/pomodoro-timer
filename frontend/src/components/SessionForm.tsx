@@ -45,7 +45,7 @@ export function SessionForm({
     }
   };
 
-  const canSave = taskName.trim().length > 0 && pomodoroCount > 0 && !saving;
+  const canSave = taskName.trim().length > 0 && !saving && !isTimerRunning;
 
   return (
     <div className="session-form">
@@ -94,12 +94,12 @@ export function SessionForm({
         onClick={handleSave}
         style={{ '--btn-color': catColor } as React.CSSProperties}
       >
-        {saving && 'Syncing to Notion…'}
-        {!saving && savedState === 'saved' && '✓ Saved to Notion'}
+        {saving && 'Saving…'}
+        {!saving && savedState === 'saved' && '✓ Session saved'}
         {!saving && savedState === 'error' && '✗ Save failed — retry'}
         {!saving && savedState === 'idle' && (
           <>
-            Save to Notion
+            {isTimerRunning ? 'Pause timer to save' : 'Save Session'}
             {pomodoroCount > 0 && (
               <span className="sf-badge">{pomodoroCount} 🍅</span>
             )}

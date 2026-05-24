@@ -121,7 +121,6 @@ export function Timer({
               onClick={enterEdit}
               title="Click to set custom time"
             >
-              {taskName && <div className="ring-task">{taskName}</div>}
               <div className="ring-time">{fmt(timeLeft)}</div>
               {pomodoroCount > 0 && (
                 <div className="ring-dots">

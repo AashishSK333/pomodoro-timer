@@ -39,6 +39,7 @@ export function SessionHistory({ refreshTrigger }: SessionHistoryProps) {
 
   const totalPoms = sessions.reduce((s, x) => s + x.pomodorosCompleted, 0);
   const totalMins = sessions.reduce((s, x) => s + x.workDuration, 0);
+  const unsyncedCount = sessions.filter((x) => !x.syncedToNotion).length;
 
   return (
     <div className="history">
@@ -74,6 +75,13 @@ export function SessionHistory({ refreshTrigger }: SessionHistoryProps) {
         <div className="history-empty">
           <span className="empty-icon">🍅</span>
           <p>No sessions yet.<br />Complete your first pomodoro!</p>
+        </div>
+      )}
+
+      {status === 'ok' && unsyncedCount > 0 && (
+        <div className="history-sync-hint">
+          <span className="sync-dot" />
+          {unsyncedCount} unsynced — ask Claude: <em>"Sync my sessions to Notion"</em>
         </div>
       )}
 

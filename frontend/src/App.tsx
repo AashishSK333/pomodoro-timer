@@ -9,7 +9,7 @@ import { saveSession } from './api';
 export default function App() {
   const [taskName, setTaskName] = useState('');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
 
   const {
     mode,

@@ -627,6 +627,24 @@ body {
 
 .stat-sep { color: var(--border-subtle); }
 
+.history-sync-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--history-bg);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+}
+.history-sync-hint em { font-style: normal; font-weight: 600; color: var(--text-primary); }
+.sync-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #f59e0b; flex-shrink: 0;
+}
+
 .history-list {
   display: flex;
   flex-direction: column;
