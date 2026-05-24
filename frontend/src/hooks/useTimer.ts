@@ -7,23 +7,30 @@ export const DURATIONS: Record<TimerMode, number> = {
   longBreak: 15 * 60,
 };
 
-function playCompletionSound() {
+function playCompletionChime() {
   try {
     const ctx = new AudioContext();
-    const times = [0, 0.18, 0.36];
-    times.forEach((t) => {
+    const now = ctx.currentTime;
+    const beep = (startOffset: number, freq: number, dur = 0.35, peak = 0.18) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, ctx.currentTime + t);
-      osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + t + 0.14);
-      gain.gain.setValueAtTime(0.25, ctx.currentTime + t);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.5);
-      osc.start(ctx.currentTime + t);
-      osc.stop(ctx.currentTime + t + 0.5);
-    });
+      osc.frequency.value = freq;
+      const t = now + startOffset;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(peak, t + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.start(t);
+      osc.stop(t + dur + 0.05);
+    };
+    // 5 cycles, 1 second apart → ~5 seconds total. Each cycle is a two-tone chime (A5 + E6).
+    for (let i = 0; i < 5; i++) {
+      beep(i * 1.0, 880, 0.35);
+      beep(i * 1.0 + 0.18, 1318, 0.35);
+    }
+    setTimeout(() => ctx.close().catch(() => {}), 6000);
   } catch {
     // AudioContext not available
   }
@@ -36,6 +43,7 @@ export function useTimer(onComplete?: (mode: TimerMode) => void) {
   const [isRunning, setIsRunning] = useState(false);
   const [pomodoroCount, setPomodoroCount] = useState(0);
   const [accumulatedWork, setAccumulatedWork] = useState(0);
+  const [justCompleted, setJustCompleted] = useState(false);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const modeRef = useRef(mode);
@@ -60,8 +68,10 @@ export function useTimer(onComplete?: (mode: TimerMode) => void) {
           intervalRef.current = null;
           setIsRunning(false);
 
-          playCompletionSound();
+          playCompletionChime();
           const currentMode = modeRef.current;
+
+          setJustCompleted(true);
 
           if (currentMode === 'focus') {
             setPomodoroCount((c) => c + 1);
@@ -79,6 +89,12 @@ export function useTimer(onComplete?: (mode: TimerMode) => void) {
           }
 
           onCompleteRef.current?.(currentMode);
+
+          // Auto-reset after the 5-second chime
+          setTimeout(() => {
+            setJustCompleted(false);
+          }, 5000);
+
           return 0;
         }
         return prev - 1;
@@ -95,11 +111,13 @@ export function useTimer(onComplete?: (mode: TimerMode) => void) {
 
   const reset = useCallback(() => {
     setIsRunning(false);
+    setJustCompleted(false);
     setTimeLeft(totalForMode);
   }, [totalForMode]);
 
   const switchMode = useCallback((newMode: TimerMode) => {
     setIsRunning(false);
+    setJustCompleted(false);
     setMode(newMode);
     setTimeLeft(DURATIONS[newMode]);
     setTotalForMode(DURATIONS[newMode]);
@@ -125,6 +143,7 @@ export function useTimer(onComplete?: (mode: TimerMode) => void) {
     pomodoroCount,
     accumulatedWork,
     progress,
+    justCompleted,
     start,
     pause,
     reset,

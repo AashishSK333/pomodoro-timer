@@ -49,6 +49,16 @@
   --toggle-bg:        rgba(255,255,255,0.10);
   --toggle-hover:     rgba(255,255,255,0.16);
 
+  /* Per-mode colors */
+  --mode-focus:       #e8621a;
+  --mode-focus-hover: #f07235;
+  --mode-short:       #3aa674;
+  --mode-short-hover: #4abf87;
+  --mode-long:        #3b82f6;
+  --mode-long-hover:  #5a96f8;
+  --mode-current:       var(--mode-focus);
+  --mode-current-hover: var(--mode-focus-hover);
+
   --mono: 'Azeret Mono', 'Courier New', monospace;
   --sans: -apple-system, 'Inter', 'SF Pro Text', sans-serif;
 }
@@ -86,7 +96,19 @@
 
   --toggle-bg:        rgba(0,0,0,0.08);
   --toggle-hover:     rgba(0,0,0,0.13);
+
+  --mode-focus:       #d85a14;
+  --mode-focus-hover: #c05010;
+  --mode-short:       #2d8f5f;
+  --mode-short-hover: #246e49;
+  --mode-long:        #2563eb;
+  --mode-long-hover:  #1d4ed8;
 }
+
+/* ─── Per-mode color cascade ──────────────────────────────── */
+[data-mode="focus"]      { --mode-current: var(--mode-focus);  --mode-current-hover: var(--mode-focus-hover);  }
+[data-mode="shortBreak"] { --mode-current: var(--mode-short);  --mode-current-hover: var(--mode-short-hover);  }
+[data-mode="longBreak"]  { --mode-current: var(--mode-long);   --mode-current-hover: var(--mode-long-hover);   }
 
 /* ─── Base ───────────────────────────────────────────────── */
 html, body { height: 100%; }
@@ -239,7 +261,7 @@ body {
   background: var(--bg-tag);
 }
 .mode-tab.active {
-  background: var(--accent);
+  background: var(--mode-current);
   color: #fff;
 }
 
@@ -266,7 +288,7 @@ body {
 
 .ring-progress {
   fill: none;
-  stroke: var(--accent);
+  stroke: var(--mode-current);
   stroke-width: 6;
   stroke-linecap: round;
   stroke-dasharray: 678.58;
@@ -334,7 +356,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--mode-current);
   opacity: 0.85;
 }
 
@@ -435,15 +457,15 @@ body {
   flex-shrink: 0;
 }
 .btn-reset:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--mode-current);
+  color: var(--mode-current);
 }
 
 .btn-primary {
   width: 62px;
   height: 62px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--mode-current);
   border: none;
   cursor: pointer;
   display: flex;
@@ -452,8 +474,17 @@ body {
   color: #fff;
   flex-shrink: 0;
 }
-.btn-primary:hover { background: var(--accent-hover); transform: scale(1.04); }
+.btn-primary:hover { background: var(--mode-current-hover); transform: scale(1.04); }
 .btn-primary:active { transform: scale(0.97); }
+
+/* Ring pulses gently when a session has just completed */
+.ring-progress.complete-flash {
+  animation: ring-pulse 1s ease-in-out infinite;
+}
+@keyframes ring-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
 
 .session-counter {
   text-align: center;

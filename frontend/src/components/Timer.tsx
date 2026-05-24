@@ -22,6 +22,7 @@ interface TimerProps {
   isRunning: boolean;
   pomodoroCount: number;
   progress: number;
+  justCompleted: boolean;
   onStart: () => void;
   onPause: () => void;
   onReset: () => void;
@@ -35,6 +36,7 @@ export function Timer({
   isRunning,
   pomodoroCount,
   progress,
+  justCompleted,
   onStart,
   onPause,
   onReset,
@@ -104,7 +106,7 @@ export function Timer({
         <svg className="timer-svg" viewBox="0 0 240 240">
           <circle className="ring-track"    cx="120" cy="120" r={RADIUS} />
           <circle
-            className="ring-progress"
+            className={`ring-progress ${justCompleted ? 'complete-flash' : ''}`}
             cx="120" cy="120" r={RADIUS}
             strokeDasharray={CIRC}
             strokeDashoffset={offset}

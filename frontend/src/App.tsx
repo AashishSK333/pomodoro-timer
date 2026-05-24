@@ -17,6 +17,7 @@ export default function App() {
     pomodoroCount,
     accumulatedWork,
     progress,
+    justCompleted,
     start,
     pause,
     reset,
@@ -29,6 +30,11 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Apply mode color tokens to <html> so ring, tabs, and play button shift together
+  useEffect(() => {
+    document.documentElement.setAttribute('data-mode', mode);
+  }, [mode]);
 
   useEffect(() => {
     if (Notification.permission === 'default') {
@@ -94,6 +100,7 @@ export default function App() {
             isRunning={isRunning}
             pomodoroCount={pomodoroCount}
             progress={progress}
+            justCompleted={justCompleted}
             onStart={start}
             onPause={pause}
             onReset={reset}
