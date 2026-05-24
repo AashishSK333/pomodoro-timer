@@ -3,11 +3,10 @@ import { Timer } from './components/Timer';
 import { SessionForm } from './components/SessionForm';
 import { SessionHistory } from './components/SessionHistory';
 import { useTimer } from './hooks/useTimer';
-import { TaskCategory, TimerMode } from './types';
+import { TaskCategory } from './types';
 import { saveSession } from './api';
 
 export default function App() {
-  const [taskName, setTaskName] = useState('');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [theme, setTheme] = useState<'dark' | 'light'>('light');
 
@@ -24,7 +23,7 @@ export default function App() {
     switchMode,
     setCustomDuration,
     resetSession,
-  } = useTimer(useCallback((_mode: TimerMode) => {}, []));
+  } = useTimer();
 
   // Apply theme to <html>
   useEffect(() => {
@@ -35,10 +34,6 @@ export default function App() {
     if (Notification.permission === 'default') {
       Notification.requestPermission().catch(() => {});
     }
-  }, []);
-
-  const handleTaskChange = useCallback((name: string, _cat: TaskCategory) => {
-    setTaskName(name);
   }, []);
 
   const handleSaveSession = useCallback(
@@ -99,7 +94,6 @@ export default function App() {
             isRunning={isRunning}
             pomodoroCount={pomodoroCount}
             progress={progress}
-            taskName={taskName}
             onStart={start}
             onPause={pause}
             onReset={reset}
@@ -107,7 +101,6 @@ export default function App() {
             onSetCustomDuration={setCustomDuration}
           />
           <SessionForm
-            onTaskChange={handleTaskChange}
             onSaveSession={handleSaveSession}
             pomodoroCount={pomodoroCount}
             isTimerRunning={isRunning}

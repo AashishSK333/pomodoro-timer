@@ -10,14 +10,12 @@ const CATEGORIES: { value: TaskCategory; color: string }[] = [
 ];
 
 interface SessionFormProps {
-  onTaskChange: (name: string, category: TaskCategory) => void;
   onSaveSession: (name: string, category: TaskCategory, notes: string) => Promise<void>;
   pomodoroCount: number;
   isTimerRunning: boolean;
 }
 
 export function SessionForm({
-  onTaskChange,
   onSaveSession,
   pomodoroCount,
   isTimerRunning,
@@ -59,7 +57,6 @@ export function SessionForm({
         disabled={isTimerRunning}
         onChange={(e) => {
           setTaskName(e.target.value);
-          onTaskChange(e.target.value, category);
         }}
       />
 
@@ -72,7 +69,6 @@ export function SessionForm({
             disabled={isTimerRunning}
             onClick={() => {
               setCategory(value);
-              onTaskChange(taskName, value);
             }}
           >
             {value}

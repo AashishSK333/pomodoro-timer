@@ -22,7 +22,6 @@ interface TimerProps {
   isRunning: boolean;
   pomodoroCount: number;
   progress: number;
-  taskName: string;
   onStart: () => void;
   onPause: () => void;
   onReset: () => void;
@@ -36,7 +35,6 @@ export function Timer({
   isRunning,
   pomodoroCount,
   progress,
-  taskName,
   onStart,
   onPause,
   onReset,

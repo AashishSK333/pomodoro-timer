@@ -83,6 +83,18 @@ Then open **http://localhost:5173** in your browser.
 └── .env                             # Notion DB reference (for Claude MCP sync)
 ```
 
+## Docker Deployment
+
+```bash
+docker-compose up --build
+```
+
+Starts both services:
+- Frontend at **http://localhost:3000**
+- Backend API at **http://localhost:8000**
+
+Session data is persisted to a `sessions_data` Docker volume and survives container restarts.
+
 ## How Notion Sync Works
 
 Sessions are stored locally in `backend/sessions.db`. No Notion API key is needed by the app.
@@ -106,7 +118,7 @@ Synced sessions show an **N** badge in the history panel.
 | Method | Path | Description |
 |---|---|---|
 | GET | `/health` | Health check |
-| GET | `/sessions` | All sessions, newest first |
+| GET | `/sessions` | All sessions, newest first (max 100) |
 | POST | `/sessions` | Save a session |
 | GET | `/sessions/unsynced` | Sessions not yet in Notion |
 | POST | `/sessions/{id}/mark-synced` | Mark session as synced |

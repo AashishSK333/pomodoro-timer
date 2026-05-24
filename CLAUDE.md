@@ -46,7 +46,6 @@ The `.env` file contains only the Notion database reference used by Claude MCP f
 | POST | `/sessions/{id}/mark-synced` | Mark a session as synced after Notion push |
 
 Key files: `backend/db.py` (SQLite logic), `backend/main.py` (FastAPI routes).
-`backend/notion_service.py` is unused — leftover from an earlier direct-API approach.
 
 ## Notion Sync (via Claude MCP)
 
